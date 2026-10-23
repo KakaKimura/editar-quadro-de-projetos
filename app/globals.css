@@ -24,8 +24,59 @@
   color-scheme: light;
 }
 
+:root[data-theme='dark'] {
+  --bg: #151b1a;
+  --col: #1d2624;
+  --card: #27322e;
+  --tx: #e9eeec;
+  --mut: #9eaaa5;
+  --line: #36443f;
+  --acc: #d9b768;
+  --acc-tx: #241c08;
+  --p1: #d98a8a;
+  --p2: #e0a87a;
+  --p3: #d4be6e;
+  --p4: #8fb2d4;
+  --ok: #79b898;
+  --ok-tx: #8fcbad;
+  --no-tx: #e09a9a;
+  --hoje: #7fa8bd;
+  --stripe: #212b28;
+  --note-bg: #3a331f;
+  --note-tx: #f0dfae;
+  color-scheme: dark;
+}
+
+.theme {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.theme button {
+  background: transparent;
+  color: var(--mut);
+  border: 0;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.theme button + button {
+  border-left: 1px solid var(--line);
+}
+.theme button[aria-pressed='true'] {
+  background: var(--acc);
+  color: var(--acc-tx);
+}
+.theme button:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: -2px;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
     --bg: #151b1a;
     --col: #1d2624;
     --card: #27322e;

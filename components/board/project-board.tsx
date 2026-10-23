@@ -7,6 +7,7 @@ import { FIXED_LANES, type BoardData, type Card } from '@/lib/board'
 import { BoardColumn } from './board-column'
 import { PriorityQueue } from './priority-queue'
 import { CardDialog } from './card-dialog'
+import { ThemeToggle } from './theme-toggle'
 
 const fetcher = (url: string) =>
   fetch(url).then((r) => {
@@ -77,6 +78,7 @@ export function ProjectBoard() {
     <div className="app">
       <header className="app-header">
         <h1>Quadro de projetos da equipe</h1>
+        <ThemeToggle />
         <input
           id="nd"
           className="inp"
