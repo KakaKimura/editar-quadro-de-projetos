@@ -11,8 +11,7 @@ type Props = {
   onDone: (error?: string) => void
 }
 
-const field =
-  'w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent'
+const field = 'inp'
 
 export function CardDialog({ card, devs, onClose, onDone }: Props) {
   const ref = useRef<HTMLDialogElement>(null)
@@ -54,10 +53,10 @@ export function CardDialog({ card, devs, onClose, onDone }: Props) {
         if (e.target === e.currentTarget) ref.current?.close()
       }}
       aria-labelledby="dlg-title"
-      className="m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl bg-card p-0 text-foreground shadow-xl backdrop:bg-foreground/30"
+      className="md"
     >
       <form
-        className="grid gap-3 p-5"
+        
         onSubmit={(e) => {
           e.preventDefault()
           if (!title.trim()) return
@@ -66,10 +65,10 @@ export function CardDialog({ card, devs, onClose, onDone }: Props) {
           )
         }}
       >
-        <h2 id="dlg-title" className="text-lg font-semibold">
+        <h2 id="dlg-title">
           {card ? 'Editar projeto' : 'Novo projeto'}
         </h2>
-        <label className="grid gap-1 text-xs text-muted-foreground">
+        <label>
           Projeto
           <input
             autoFocus
@@ -80,11 +79,11 @@ export function CardDialog({ card, devs, onClose, onDone }: Props) {
             className={field}
           />
         </label>
-        <label className="grid gap-1 text-xs text-muted-foreground">
+        <label>
           Cliente
           <input value={client} onChange={(e) => setClient(e.target.value)} placeholder="Cliente" className={field} />
         </label>
-        <label className="grid gap-1 text-xs text-muted-foreground">
+        <label>
           Prioridade (P1 é a mais alta)
           <select value={prio} onChange={(e) => setPrio(Number(e.target.value))} className={field}>
             {[1, 2, 3, 4].map((i) => (
@@ -92,8 +91,8 @@ export function CardDialog({ card, devs, onClose, onDone }: Props) {
             ))}
           </select>
         </label>
-        <div className="grid grid-cols-2 gap-3">
-          <label className="grid gap-1 text-xs text-muted-foreground">
+        <>
+          <label>
             Coluna
             <select value={lane} onChange={(e) => setLane(e.target.value)} className={field}>
               {lanes.map(([v, n]) => (
@@ -103,7 +102,7 @@ export function CardDialog({ card, devs, onClose, onDone }: Props) {
               ))}
             </select>
           </label>
-          <label className="grid gap-1 text-xs text-muted-foreground">
+          <label>
             Responsável
             <select
               value={devs.includes(lane) ? lane : owner}
@@ -119,17 +118,17 @@ export function CardDialog({ card, devs, onClose, onDone }: Props) {
               ))}
             </select>
           </label>
-        </div>
-        <label className="flex items-center gap-2 text-sm">
+        </>
+        <label className="chk">
           <input
             type="checkbox"
             checked={blocked}
             onChange={(e) => setBlocked(e.target.checked)}
-            className="size-4 accent-[var(--p1)]"
+           
           />
           Aguardando cliente (cliente não respondeu)
         </label>
-        <label className="grid gap-1 text-xs text-muted-foreground">
+        <label>
           Observação
           <input
             value={note}
@@ -138,13 +137,13 @@ export function CardDialog({ card, devs, onClose, onDone }: Props) {
             className={field}
           />
         </label>
-        <div className="mt-1 flex flex-wrap justify-end gap-2">
+        <div className="r">
           {card && (
             <button
               type="button"
               disabled={pending}
               onClick={() => handle(() => deleteCard(card.id))}
-              className="mr-auto rounded-lg border border-p1-soft px-3 py-2 text-sm font-medium text-p1 hover:bg-p1-soft/30 disabled:opacity-50"
+              className="btn d"
             >
               Excluir
             </button>
@@ -152,14 +151,14 @@ export function CardDialog({ card, devs, onClose, onDone }: Props) {
           <button
             type="button"
             onClick={() => ref.current?.close()}
-            className="rounded-lg border border-border px-3 py-2 text-sm font-medium hover:bg-column"
+            className="btn g"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={pending}
-            className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90 disabled:opacity-50"
+            className="btn"
           >
             {pending ? 'Salvando…' : 'Salvar'}
           </button>

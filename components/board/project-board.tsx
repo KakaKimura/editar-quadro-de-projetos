@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import useSWR from 'swr'
-import { Plus, UserPlus } from 'lucide-react'
 import { addDev, moveCard, removeDev, toggleBlocked } from '@/app/actions/board'
 import { FIXED_LANES, type BoardData, type Card } from '@/lib/board'
 import { BoardColumn } from './board-column'
@@ -75,51 +74,37 @@ export function ProjectBoard() {
   }
 
   return (
-    <div className="flex h-dvh flex-col">
-      <header className="flex flex-wrap items-center gap-3 border-b border-border bg-card/60 px-4 py-3 md:px-6">
-        <h1 className="flex-1 text-lg font-semibold text-pretty">Quadro de projetos da equipe</h1>
-        <div className="flex items-center gap-2">
-          <label htmlFor="new-dev" className="sr-only">
-            Nome do novo desenvolvedor
-          </label>
-          <input
-            id="new-dev"
-            value={devName}
-            onChange={(e) => setDevName(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.nativeEvent.isComposing && e.keyCode !== 229) handleAddDev()
-            }}
-            placeholder="Novo desenvolvedor"
-            className="w-40 rounded-lg border border-border bg-card px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          />
-          <button
-            type="button"
-            onClick={handleAddDev}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-column"
-          >
-            <UserPlus className="size-4" aria-hidden="true" />
-            Desenvolvedor
-          </button>
-        </div>
-        <button
-          type="button"
-          onClick={() => setEditing(null)}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90"
-        >
-          <Plus className="size-4" aria-hidden="true" />
-          Novo projeto
+    <div className="app">
+      <header className="app-header">
+        <h1>Quadro de projetos da equipe</h1>
+        <input
+          id="nd"
+          className="inp"
+          aria-label="Nome do novo desenvolvedor"
+          value={devName}
+          onChange={(e) => setDevName(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.nativeEvent.isComposing && e.keyCode !== 229) handleAddDev()
+          }}
+          placeholder="Novo desenvolvedor"
+        />
+        <button type="button" className="btn g" onClick={handleAddDev}>
+          + Desenvolvedor
+        </button>
+        <button type="button" className="btn" onClick={() => setEditing(null)}>
+          + Novo projeto
         </button>
       </header>
 
       {(notice || error) && (
-        <div role="status" className="bg-p3-soft/40 px-4 py-2 text-sm text-foreground md:px-6">
+        <div role="status" className="note">
           {notice || 'Não foi possível conectar ao banco de dados. Tentando novamente…'}
         </div>
       )}
 
       <PriorityQueue cards={cards.filter((c) => laneOf(c) !== 'done')} loading={isLoading} />
 
-      <main className="flex min-h-0 flex-1 items-start gap-3 overflow-auto px-4 pt-2 pb-4 md:px-6">
+      <main className="board">
         {keys.map((k) => (
           <BoardColumn
             key={k}
