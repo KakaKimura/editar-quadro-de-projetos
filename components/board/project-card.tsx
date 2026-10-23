@@ -3,9 +3,17 @@
 import { fmtDate, PRIO_LABEL, type Card } from '@/lib/board'
 import { cn } from '@/lib/utils'
 
-type Props = { card: Card; isNext: boolean; onEdit: () => void; onToggle: () => void }
+type Props = {
+  card: Card
+  isNext: boolean
+  canLeft: boolean
+  canRight: boolean
+  onShift: (dir: -1 | 1) => void
+  onEdit: () => void
+  onToggle: () => void
+}
 
-export function ProjectCard({ card: c, isNext, onEdit, onToggle }: Props) {
+export function ProjectCard({ card: c, isNext, canLeft, canRight, onShift, onEdit, onToggle }: Props) {
   return (
     <article
       draggable
@@ -35,7 +43,7 @@ export function ProjectCard({ card: c, isNext, onEdit, onToggle }: Props) {
         </div>
       )}
       <div className="ft">
-        {c.owner && <span className="ow">{c.owner}</span>}
+        {c.owner ? <span className="ow">{c.owner}</span> : <span />}
         {c.lane !== 'done' && (
           <button
             type="button"
@@ -48,6 +56,34 @@ export function ProjectCard({ card: c, isNext, onEdit, onToggle }: Props) {
             {c.blocked ? '▶ Cliente respondeu' : '⏸ Cliente não respondeu'}
           </button>
         )}
+      </div>
+      <div className="mv">
+        <button
+          type="button"
+          className="arr"
+          title="Mover para a coluna da esquerda"
+          aria-label={`Mover ${c.title} para a coluna da esquerda`}
+          disabled={!canLeft}
+          onClick={(e) => {
+            e.stopPropagation()
+            onShift(-1)
+          }}
+        >
+          {'◀ Mover'}
+        </button>
+        <button
+          type="button"
+          className="arr"
+          title="Mover para a coluna da direita"
+          aria-label={`Mover ${c.title} para a coluna da direita`}
+          disabled={!canRight}
+          onClick={(e) => {
+            e.stopPropagation()
+            onShift(1)
+          }}
+        >
+          {'Mover ▶'}
+        </button>
       </div>
     </article>
   )

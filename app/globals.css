@@ -411,9 +411,44 @@ body {
   cursor: pointer;
   margin-left: auto;
 }
-.qb:hover {
+  .qb:hover {
   background: var(--col);
-}
+  }
+  .ctl {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  }
+  .mv {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--line);
+  }
+  .arr {
+  font-size: 11px;
+  color: var(--mut);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-family: inherit;
+  }
+  .arr:hover:not(:disabled) {
+  background: var(--col);
+  color: var(--tx);
+  }
+  .arr:disabled {
+  opacity: 0.35;
+  cursor: default;
+  }
+  .arr:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 1px;
+  }
 .empty {
   color: var(--mut);
   font-size: 12px;

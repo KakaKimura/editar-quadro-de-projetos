@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import useSWR from 'swr'
-import { addDev, moveCard, removeDev, toggleBlocked } from '@/app/actions/board'
+import { addDev, moveCard, removeDev, reorderDevs, toggleBlocked } from '@/app/actions/board'
 import { FIXED_LANES, type BoardData, type Card } from '@/lib/board'
 import { BoardColumn } from './board-column'
 import { PriorityQueue } from './priority-queue'
@@ -67,6 +67,21 @@ export function ProjectBoard() {
     run(() => toggleBlocked(c.id), optimistic)
   }
 
+  function handleShiftCard(c: Card, dir: -1 | 1) {
+    const i = keys.indexOf(laneOf(c))
+    const target = keys[i + dir]
+    if (target) handleMove(c.id, target)
+  }
+
+  function handleShiftDev(name: string, dir: -1 | 1) {
+    const i = devs.indexOf(name)
+    const j = i + dir
+    if (i < 0 || j < 0 || j >= devs.length) return
+    const order = [...devs]
+    ;[order[i], order[j]] = [order[j], order[i]]
+    run(() => reorderDevs(order), { cards, devs: order })
+  }
+
   function handleAddDev() {
     const v = devName.trim()
     if (!v || devs.includes(v) || (FIXED_LANES as readonly string[]).includes(v.toLowerCase())) return
@@ -107,12 +122,18 @@ export function ProjectBoard() {
       <PriorityQueue cards={cards.filter((c) => laneOf(c) !== 'done')} loading={isLoading} />
 
       <main className="board">
-        {keys.map((k) => (
+        {keys.map((k, idx) => (
           <BoardColumn
             key={k}
             laneKey={k}
             isDev={devs.includes(k)}
             cards={cards.filter((c) => laneOf(c) === k)}
+            canCardLeft={idx > 0}
+            canCardRight={idx < keys.length - 1}
+            canColLeft={devs.indexOf(k) > 0}
+            canColRight={devs.includes(k) && devs.indexOf(k) < devs.length - 1}
+            onShiftCard={handleShiftCard}
+            onShiftCol={(dir) => handleShiftDev(k, dir)}
             onDropCard={handleMove}
             onEdit={(c) => setEditing(c)}
             onToggle={handleToggle}

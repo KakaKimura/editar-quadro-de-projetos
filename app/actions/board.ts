@@ -105,6 +105,21 @@ export async function addDev(rawName: string) {
     .onConflictDoNothing()
 }
 
+export async function reorderDevs(order: string[]) {
+  const { names } = await validLanes()
+  if (
+    !Array.isArray(order) ||
+    order.length !== names.length ||
+    !order.every((n) => names.includes(n)) ||
+    new Set(order).size !== order.length
+  ) {
+    throw new Error('Ordem de colunas inválida.')
+  }
+  await Promise.all(
+    order.map((name, i) => db.update(boardDevs).set({ position: i + 1 }).where(eq(boardDevs.name, name))),
+  )
+}
+
 export async function removeDev(name: string) {
   const [{ count }] = await db
     .select({ count: sql<number>`count(*)::int` })
